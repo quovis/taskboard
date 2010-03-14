@@ -3,4 +3,4 @@ db/*.sqlite3
 db/schema.rb
 tmp
 coverage
-tmpcoverage.data
+coverage.data
