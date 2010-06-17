@@ -5,3 +5,4 @@ tmp
 coverage
 coverage.data
 config/database.yml
+config/options.yml
