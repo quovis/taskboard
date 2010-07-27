@@ -1,4 +1,4 @@
-- if @project.users.include?(current_user)
+- if @project.users.include?(current_user) || current_user.admins?(@project.organization)
   = render :partial => "menu" , :locals => { :team => @team }
   = render :partial => "adder"
 = render :partial => "taskboard_table", :locals => { :name => @project.name }

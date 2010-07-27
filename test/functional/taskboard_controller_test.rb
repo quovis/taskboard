@@ -24,16 +24,22 @@ class TaskboardControllerTest < ActionController::TestCase
         get :index, :project_id => @project.to_param
       end
       should_render_template :index
+      should "see the menu" do
+        assert_select "#menu", 1
+      end
     end
 
-    context "if i do GET to :index in a project i don't belong to" do
+    context "if i do GET to :index in a public project i don't belong to" do
       setup do
         @project1 = Factory(:project)
         @project1.public = true
-        @project.save
-        get :index, :project_id => @project.to_param, :public_hash => @project.public_hash
+        @project1.save
+        get :index, :project_id => @project1.to_param, :public_hash => @project1.public_hash
       end
       should_render_template :index
+      should "not see the menu" do
+        assert_select "#menu", 0
+      end
     end
 
     context "if i do GET to :team in a team i belong to" do
@@ -41,30 +47,114 @@ class TaskboardControllerTest < ActionController::TestCase
         get :team, :team_id => @team.to_param
       end
       should_render_template :team
+      should "see the menu" do
+        assert_select "#menu", 1
+      end
     end
   end
-  # 
-  # context "If i'm an organization admin" do
-  #   setup do
-  #     @organization = Factory(:organization)
-  #     @user = Factory(:user)
-  #     @mem = @organization.organization_memberships.build(:user => @user)
-  #     @mem.admin = true
-  #     @mem.save
-  #   end
-  #   
-  #   should "admin the organization" do
-  #     assert @user.organizations_administered.include?(@organization)
-  #   end
-  # 
-  # end
-  # 
-  # context "If I'm an admin" do
-  #   setup do
-  #     @user = admin_user
-  #   end
-  #   
-  # end
+  
+  context "If i'm an organization admin" do
+    setup do
+      @organization = Factory(:organization)
+      @user = Factory(:user)
+      @mem = @organization.organization_memberships.build(:user => @user)
+      @mem.admin = true
+      @mem.save
+    end
+    
+    should "admin the organization" do
+      assert @user.organizations_administered.include?(@organization)
+    end
+  
+    context "if i do GET to :index in a public project i don't belong to and from other organization" do
+      setup do
+        @project1 = Factory(:project)
+        @project1.public = true
+        @project1.save
+        get :index, :project_id => @project1.to_param, :public_hash => @project1.public_hash
+      end
+      should_render_template :index
+      should "not see the menu" do
+        assert_select "#menu", 0
+      end
+    end
+
+    context "in a public project i don't belong to from my organization" do
+      setup do
+        @organization = @user.organizations.first
+        @team = @organization.teams.create(:name => "blo")
+        @project = Factory(:project)
+        @project.public = true
+        @project.teams << @team
+        @project.organization = @organization
+        @project.save
+      end
+      should "admin the project" do
+        assert @user.admins?(@project.organization)
+      end
+
+      context "if I do GET to :index" do
+        setup do
+          get :index, :project_id => @project.to_param, :public_hash => @project.public_hash
+        end
+        should_render_template :index
+        should "see the menu" do
+          assert_select "#menu", 1
+        end
+      end
+      
+      context "if I do GET to :team" do
+        setup do
+          get :team, :team_id => @project.teams.first.to_param, :public_hash => @project.public_hash
+        end
+        should_render_template :team
+        should "see the menu" do
+          assert_select "#menu", 1
+        end
+      end
+
+    end
+  
+  end
+  
+  context "If I'm an admin" do
+    setup do
+      @user = admin_user
+    end
+    
+    context "in a public project i don't belong to and from other organization" do
+      setup do
+        @organization = Factory(:organization)
+        @project = @organization.projects.first
+        @project.public = true
+        @project.save
+      end
+      
+      context "if i do GET to :index" do
+        setup do
+          get :index, :project_id => @project.to_param, :public_hash => @project.public_hash
+          
+        end
+        should_render_template :index
+        should "see the menu" do
+          assert_select "#menu", 1
+        end
+      end
+
+      context "if I do GET to :team" do
+        setup do
+          get :team, :team_id => @project.teams.first.to_param
+        end
+        should_render_template :team
+        should "see the menu" do
+          assert_select "#menu", 1
+        end
+      end
+      
+    end
+    
+    
+  end
 
   # test "last project is set when accessing the taskboard" do
   #   login_as_organization_admin

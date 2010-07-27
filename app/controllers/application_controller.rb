@@ -87,7 +87,7 @@ class ApplicationController < ActionController::Base
     
     def require_belong_to_team
       @team = Team.find(params[:team_id])
-      require_organization_admin if !@team.users.include?(current_user)
+      deny_access if !@team.users.include?(current_user) && !current_user.admins?(@team.organization) 
     end
 
     def require_belong_to_project_or_team_or_admin
