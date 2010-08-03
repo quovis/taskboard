@@ -31,6 +31,7 @@ ActionController::Routing::Routes.draw do |map|
     p.resources :taskboard, :only => [:index]
     p.resources :backlog, :only => [:index]
     p.backlog_export 'backlog/export', :controller => :backlog, :action => :export
+    p.new_release 'releases/new', :controller => :stories, :action => :new, :release => true
     p.resources :stories do |s|
      s.resources :tasks, :has_many => [ :statustags, :nametags ]
      s.task_start 'tasks/:id/start', :controller => :tasks, :action => :start, :conditions => { :method => :post }

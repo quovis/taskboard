@@ -8,17 +8,28 @@
   = form.label :name
   = form.text_field :name
 
-.field
-  = form.label :realid, "Story ID"
-  = form.text_field :realid, :value => @story.realid ? @story.realid : @default_realid
+- if @story.release?
+  = form.hidden_field :realid, :value => @story.realid ? @story.realid : @default_realid
+- else
+  .field
+    = form.label :realid, "Story ID"
+    = form.text_field :realid, :value => @story.realid ? @story.realid : @default_realid
 
 .field
   = form.label :priority
   = form.text_field :priority, :value => @story.priority ? @story.priority : @default_priority
 
-.field
-  = form.label :size
-  = form.text_field :size
+- if @story.release?
+  = form.hidden_field :size, :value => 9000
+- else
+  .field
+    = form.label :size
+    = form.text_field :size
+
+- if @story.release?
+  = form.hidden_field :release, :value => true
+- else
+  = form.hidden_field :release, :value => false
 
 .field
   = form.label :description

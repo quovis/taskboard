@@ -14,6 +14,7 @@ class StoriesController < ApplicationController
   # GET /projects/:project_id/stories/new
   def new
     @story = (params[:team_id].blank?) ? @project.stories.build : Story.new
+    @story.release = true if(!params[:release].blank?)
     @projects = @team.projects if !params[:team_id].blank?
     @default_realid = @project ? @project.next_realid : @team.projects.first.next_realid
     @default_priority = @project ? @project.next_priority : @team.next_priority

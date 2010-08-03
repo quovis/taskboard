@@ -9,6 +9,8 @@
   .item.new_story{ 'data-project-id' => @project.to_param, 'data-team-id' => @team.to_param }
   - link_to @view == :project ? project_backlog_export_path(@project.to_param) : team_backlog_export_path(@team.to_param) do
     .item.export_backlog
+
+  .item.new_release{ 'data-project-id' => @project.to_param, 'data-team-id' => @team.to_param }
     
   - link_to logout_path do
     .item.logout

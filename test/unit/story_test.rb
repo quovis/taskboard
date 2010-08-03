@@ -25,7 +25,8 @@ class StoryTest < ActiveSupport::TestCase
     should_validate_presence_of :priority
     should_allow_values_for :priority, 0, 10, 20
     should_not_allow_values_for :priority, "hola", "okaopsdgjko", "1 bla", "20 asdasd"
-    
+
+    should_allow_values_for :release, true, false
   end
   
   context "When created" do

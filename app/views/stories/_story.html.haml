@@ -1,7 +1,7 @@
-%tr.story{:id => "story-#{story.id}", :class => "#{story.status}", 'data-story-id' => story.id, 'data-project-id' => story.project_id}
+%tr.story{:id => "story-#{story.id}", :class => "#{story.status} #{ 'release' if story.release? }", 'data-story-id' => story.id, 'data-project-id' => story.project_id}
   %td.name-cell
     %strong
-      = story.realid
+      = story.release? ? 'RELEASE' : story.realid
     = story.name
     - if @view == :team
       == - #{link_to("#{story.project.name}", project_backlog_index_path(story.project.id))} - 
@@ -28,7 +28,7 @@
         == #{link_to_remote "Delete", :url => project_story_url(story.project,story), :confirm => 'Are you sure?', :method => :delete, :complete => "location.reload(true);"} ]
     - else
       == [ #{link_to_remote('Re-open', :url => project_story_start_path(story.project, story), :success => 'location = location')} / Date Finished: #{story.updated_at.strftime("%d %b %Y")}]
-  %td.priority-cell
+  %td.priority-cell{ :colspan => story.release? ? 2 : 1 }
     %span.in_place_edit{ :id => "priority-#{story.id}" }
       - if !story.finished?
         %p{ :id => "edit_priority_#{story.id}"}= story.priority
@@ -36,13 +36,14 @@
           new Ajax.InPlaceEditor('edit_priority_#{story.id}', '/projects/#{story.project.to_param}/stories/#{story.to_param}/update_priority', {cancelControl: 'button', onComplete: function(){ location = location }});
       - else
         %p -
-  %td.size-cell
-    %span.in_place_edit{ :id => "size-#{story.id}" }
-      - if !story.finished?
-        %p{ :id => "edit_size_#{story.id}"}= story.size ? story.size : "Edit"
-        :javascript
-          new Ajax.InPlaceEditor('edit_size_#{story.id}', '/projects/#{story.project.to_param}/stories/#{story.to_param}/update_size', { cancelControl: 'button' });
-      - else
-        %p= story.id
+  - if !story.release?
+    %td.size-cell
+      %span.in_place_edit{ :id => "size-#{story.id}" }
+        - if !story.finished?
+          %p{ :id => "edit_size_#{story.id}"}= story.size ? story.size : "Edit"
+          :javascript
+            new Ajax.InPlaceEditor('edit_size_#{story.id}', '/projects/#{story.project.to_param}/stories/#{story.to_param}/update_size', { cancelControl: 'button' });
+        - else
+          %p= story.id
   %td.description-cell
     = story.description

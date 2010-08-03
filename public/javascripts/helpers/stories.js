@@ -3,11 +3,14 @@ Application.Helpers.Stories = {
     this._setupListeners();
   },
   
-  newForm: function(projectId,teamId){
+  newForm: function(projectId,teamId,isRelease){
+    var controller = 'stories'
+    if(isRelease)
+      controller = 'releases'
     if(projectId){
-      var request_url = '/projects/'+ projectId + '/stories/new'
+      var request_url = '/projects/'+ projectId + '/' + controller + '/new'
     }else{
-      var request_url = '/teams/'+ teamId + '/stories/new'
+      var request_url = '/teams/'+ teamId + '/' + controller + '/new'
     }
     // Request form
     new Ajax.Request(request_url, {
@@ -151,7 +154,12 @@ Application.Helpers.Stories = {
         if(target.match('.new_story')){
           projectId = target.readAttribute('data-project-id');
           teamId = target.readAttribute('data-team-id');
-          Stories.newForm(projectId,teamId);
+          Stories.newForm(projectId,teamId,false);
+        }
+        if(target.match('.new_release')){
+          projectId = target.readAttribute('data-project-id');
+          teamId = target.readAttribute('data-team-id');
+          Stories.newForm(projectId,teamId,true);
         }
         // // Listener for remove story
         // if(target.match('.remove_story')){

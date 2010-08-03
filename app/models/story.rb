@@ -19,7 +19,7 @@ class Story < ActiveRecord::Base
   # Attributes Accessible
   #
   ################################################################################################################
-  attr_accessible :name, :priority, :size, :description, :realid, :project
+  attr_accessible :name, :priority, :size, :description, :realid, :project, :release
 
   ################################################################################################################
   #
