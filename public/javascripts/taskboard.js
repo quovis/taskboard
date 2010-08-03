@@ -250,7 +250,7 @@ var DDM = YAHOO.util.DragDropMgr;
         var srcEl = this.getEl();
         var element_name = srcEl.id.split('-');
         var dest_name = destEl.id.split('-');
-        if(destEl.hasClassName('task') && DDM.interactionInfo.drop.length == 3){
+        if(DDM.interactionInfo.drop.length >= 3){
           // The position of the cursor at the time of the drop (YAHOO.util.Point) 
           var pt = DDM.interactionInfo.point;
         
@@ -285,25 +285,23 @@ var DDM = YAHOO.util.DragDropMgr;
             DDM.refreshCache();
           }
         }else{
-          if(DDM.interactionInfo.drop.length != 3){
-            var srcEl = this.getEl();
-            if(srcEl.parentNode){
-              var projectId = srcEl.up('tr').readAttribute('data-project-id');
-              var storyId = srcEl.up('tr').readAttribute('data-story-id');
-              var taskId = srcEl.up('.task').readAttribute('data-task-id');
-            
-              if(dest_name[0] != 'task'){
-              new Ajax.Request('/projects/'+projectId+'/stories/'+storyId+'/tasks/'+taskId+'/'+element_name[0]+'s/'+element_name[3], {
-              asynchronous:true, 
-              evalScripts:true,  
-              method:'delete',
-              parameters:'project_id='+element_name[2]+'&authenticity_token=' + getAuthKey()})
-              var anim = new YAHOO.util.Anim(srcEl.id, { opacity: { to: 0 }, duration: 0.5 });
-              anim.onComplete.subscribe(function(srcEl) { 
-                srcEl.parentNode.removeChild(srcEl);
-              });
-              anim.animate();
-              }
+          var srcEl = this.getEl();
+          if(srcEl.parentNode){
+            var projectId = srcEl.up('tr').readAttribute('data-project-id');
+            var storyId = srcEl.up('tr').readAttribute('data-story-id');
+            var taskId = srcEl.up('.task').readAttribute('data-task-id');
+          
+            if(dest_name[0] != 'task'){
+            new Ajax.Request('/projects/'+projectId+'/stories/'+storyId+'/tasks/'+taskId+'/'+element_name[0]+'s/'+element_name[3], {
+            asynchronous:true, 
+            evalScripts:true,  
+            method:'delete',
+            parameters:'project_id='+element_name[2]+'&authenticity_token=' + getAuthKey()})
+            var anim = new YAHOO.util.Anim(srcEl.id, { opacity: { to: 0 }, duration: 0.5 });
+            anim.onComplete.subscribe(function(srcEl) { 
+              srcEl.parentNode.removeChild(srcEl);
+            });
+            anim.animate();
             }
           }
         }
