@@ -15,7 +15,7 @@ class TaskboardController < ApplicationController
     end
     
     @team = @project.team_including(current_user)
-    @color = @team.color ? @team.color : '0C82EB'
+    @color = (@team && @team.color) ? @team.color : '0C82EB'
     @projects = [@project]
     @users = @project.users
   end
