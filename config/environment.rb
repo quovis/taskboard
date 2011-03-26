@@ -28,13 +28,6 @@ Rails::Initializer.run do |config|
   # You have to specify the :lib option for libraries, where the Gem name (sqlite3-ruby) differs from the file itself (sqlite3)
   # config.gem "bj"
   # config.gem "hpricot", :version => '0.6', :source => "http://code.whytheluckystiff.net"
-  config.gem "sqlite3-ruby", :lib => "sqlite3"
-  config.gem 'haml'
-  config.gem 'authlogic'
-  config.gem "thoughtbot-paperclip", :lib => "paperclip", :source => "http://gems.github.com"
-  
-  # erubis required by rails_xss
-  config.gem "erubis"
   
   # Only load the plugins named here, in the order given. By default, all plugins 
   # in vendor/plugins are loaded in alphabetical order.
