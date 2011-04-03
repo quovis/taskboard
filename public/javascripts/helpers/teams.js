@@ -101,7 +101,6 @@ Application.Helpers.Teams = {
   },
   
   addUser: function(user){
-    user.fade({duration: 0.2});
     var organizationId = user.readAttribute('data-organization-id');
     var teamId = user.readAttribute('data-team-id');
     var userId = user.readAttribute('data-user-id');
@@ -112,20 +111,29 @@ Application.Helpers.Teams = {
     // Add the picture
     var avatar = new Element('img', { src : userAvatar});
     var avatarContainer = new Element('div', {'class' : 'avatar'});
-    avatarContainer.insert({bottom: avatar})
-    userContainer.insert({bottom: avatarContainer});
-    
-    // Add the nametag
     var nametagContainer = new Element('div', {'class' : 'name'}).update(userNametag);
-    userContainer.insert({bottom: nametagContainer});
-
-    // Add Remove Button
-    userContainer.insert({bottom: new Element('div', {'class': 'remove', 'title' : 'Remove From Team'})})
     
-    userContainer.hide();
-    $('team_users').insert({bottom: userContainer});
-    userContainer.appear();
-    new Ajax.Request('/organizations/'+organizationId+'/teams/'+teamId+'/users/'+userId, {method: 'post'});
+    new Ajax.Request('/organizations/'+organizationId+'/teams/'+teamId+'/users/'+userId, 
+      {method: 'post',
+        onSuccess: function(transport){
+          if(200 == transport.status){
+            user.fade({duration: 0.2});
+            avatarContainer.insert({bottom: avatar})
+            userContainer.insert({bottom: avatarContainer});
+
+            // Add the nametag
+            userContainer.insert({bottom: nametagContainer});
+
+            // Add Remove Button
+            userContainer.insert({bottom: new Element('div', {'class': 'remove', 'title' : 'Remove From Team'})})
+
+            userContainer.hide();
+            $('team_users').insert({bottom: userContainer});
+            userContainer.appear();
+          }
+        }
+      }
+    );
   },
   
   removeUser: function(user){
@@ -140,16 +148,21 @@ Application.Helpers.Teams = {
 
     // Add the name
     var nameContainer = new Element('div', {'class' : 'name'}).update(userName);
-    userContainer.insert({bottom: nameContainer});
+    
+    new Ajax.Request('/organizations/'+organizationId+'/teams/'+teamId+'/users/'+userId, {
+      method: 'delete',
+      onSuccess: function(transport){
+        if(200 == transport.status){
+          userContainer.insert({bottom: nameContainer});
 
-    // Add Add Button
-    userContainer.insert({bottom: new Element('div', {'class': 'add'}).update('add to team')})
-    
-    userContainer.hide();
-    $('organization_users').insert({bottom: userContainer});
-    userContainer.appear();
-    
-    new Ajax.Request('/organizations/'+organizationId+'/teams/'+teamId+'/users/'+userId, {method: 'delete'});
+          // Add Add Button
+          userContainer.insert({bottom: new Element('div', {'class': 'add'}).update('add to team')})
+
+          userContainer.hide();
+          $('organization_users').insert({bottom: userContainer});
+          userContainer.appear();
+        }
+      }});
   },
   
   _setupListeners: function(){
