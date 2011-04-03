@@ -11,6 +11,9 @@ gem "mysql"
 gem "erubis"
 
 group :test do
-  gem "shoulda", "2.10.3"
+  gem "ZenTest"
+  gem "hoe"
+  gem "redgreen"
+  gem "shoulda", "2.10.2"
   gem "factory_girl", "1.3.3"
 end

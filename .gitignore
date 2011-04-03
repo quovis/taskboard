@@ -9,3 +9,4 @@ config/options.yml
 public/system
 public/stylesheets/*.css
 .rvmrc
+.autotest
