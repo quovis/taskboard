@@ -26,7 +26,7 @@ module RequireBelongToProjectOrAdmiOn
         context "on #{method.to_s.upcase} to :#{action}" do
           setup do
             if need_ids.include?(action)
-              send(method, action, :project_id => @project.to_param, :id => 1)
+              send(method, action, :project_id => @project.to_param, :id => Project.first.id)
             else
               send(method, action, :project_id => @project.to_param)
             end
@@ -59,7 +59,7 @@ module RequireBelongToProjectOrAdmiOn
         context "on #{method.to_s.upcase} to :#{action}" do
           setup do
             if need_ids.include?(action)
-              send(method, action, :project_id => @project.to_param, :id => 1)
+              send(method, action, :project_id => @project.to_param, :id => Project.first.id)
             else
               send(method, action, :project_id => @project.to_param)
             end
