@@ -114,7 +114,7 @@
       = link_to project_backlog_index_url(@project, :public_hash => @project.public_hash), project_taskboard_index_url(@project, :public_hash => @project.public_hash)
 
 - content_for :helpers do
-  = javascript_include_tag 'helpers/projects.js', 'helpers/modal_dialog.js', 'helpers/color_picker.js'
+  = javascript_include_tag 'helpers/projects.js', 'helpers/modal_dialog.js', 'helpers/color_picker.js', 'helpers/users.js'
 
 - content_for :title do
   == Project Dashboard - #{@project.name} (#{@project.organization.name})
