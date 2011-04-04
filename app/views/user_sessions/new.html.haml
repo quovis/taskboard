@@ -50,14 +50,13 @@
           = f.check_box :remember_me, :class => 'checkbox'
           = f.submit "login", :class => 'submit'
           #revision= FULL_VERSION
-          - if flash[:notice]
-            #flash
-              = flash[:notice]
-              :javascript
-                Effect.Pulsate('flash', { pulses: 3, duration: 1});
-              
-        
       #about-right
+        - if flash[:notice]
+          #flash
+            = flash[:notice]
+            :javascript
+              Effect.Pulsate('flash', { pulses: 3, duration: 1});
+      
         /= image_tag'login/request-membership.png', :alt => 'Request Membership', :style => "cursor: pointer; position: relative; top: 10px;", :onClick => "alert('Beta Memberships are not available right now... keep in touch (oleee)');"
         .screenshot= image_tag 'login/screenshot-0.png', :alt => 'Taskboard Screenshot'
         .screenshot= image_tag 'login/screenshot-1.png', :alt => 'Backlog Screenshot'
