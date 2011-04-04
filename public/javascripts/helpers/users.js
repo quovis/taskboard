@@ -59,7 +59,6 @@ Application.Helpers.Users = {
     ModalDialog.close();
     var user = response
     var user_container = $('user-' + user.id)
-    var name = user_container.down('.name')
     
 	if(user.is_current){
 		// update picture and name from top
@@ -67,8 +66,11 @@ Application.Helpers.Users = {
 		$('current_user_picture').src = user.avatar;
 	}
 	
-	name.innerHTML = user.name;
-    user_container.highlight({ duration: 0.8 });
+	if(user_container != undefined){
+  	var name = user_container.down('.name')
+  	name.innerHTML = user.name;
+      user_container.highlight({ duration: 0.8 });
+    }
   },
   
   deleteUser: function(user, organization){
@@ -99,37 +101,39 @@ Application.Helpers.Users = {
   
   // Handles the creation of the observers for edit and remove 
   _organizationListListener: function(){
-    $("organizations").observe('click', function(event){
-      var target = event.element();
+    if($("organizations") != undefined){
+      $("organizations").observe('click', function(event){
+        var target = event.element();
 
-      // Listener for add
-      if(target.match('.new_user')){
-        var organizationId = target.up('.organization').readAttribute('data-organization-id');
-        Users.newForm(organizationId);
-      }
+        // Listener for add
+        if(target.match('.new_user')){
+          var organizationId = target.up('.organization').readAttribute('data-organization-id');
+          Users.newForm(organizationId);
+        }
 
-      // Listener for remove
-      if(target.match('.remove_user')){
-        var organization = target.up('.organization');
-        var user = target.up('.user');
-        ModalDialog.yes_no("Are you sure?", function() { Users.deleteUser(user, organization) })
-      }
+        // Listener for remove
+        if(target.match('.remove_user')){
+          var organization = target.up('.organization');
+          var user = target.up('.user');
+          ModalDialog.yes_no("Are you sure?", function() { Users.deleteUser(user, organization) })
+        }
       
-      // Listener for edit
-      if(target.match('.edit_user')){
-        var organization = target.up('.organization');
-        var user = target.up('.user');
-        Users.editForm(user, organization);
-      }
+        // Listener for edit
+        if(target.match('.edit_user')){
+          var organization = target.up('.organization');
+          var user = target.up('.user');
+          Users.editForm(user, organization);
+        }
 
-      // Listener for toggle_admin
-      if(target.match('.toggle_admin')){
-        var organization = target.up('.organization');
-        var user = target.up('.user');
-        Users.toggleAdmin(user, organization);
-      }
+        // Listener for toggle_admin
+        if(target.match('.toggle_admin')){
+          var organization = target.up('.organization');
+          var user = target.up('.user');
+          Users.toggleAdmin(user, organization);
+        }
       
-    });
+      });
+    }
     
     $('links').observe('click', function(event){
       var target = event.element();
