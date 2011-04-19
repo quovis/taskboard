@@ -5,9 +5,11 @@ ActionController::Routing::Routes.draw do |map|
   map.login '/login', :controller => "user_sessions", :action => "new" 
   map.logout '/logout', :controller => "user_sessions", :action => "destroy"
 
+  # Be aware that many routes here are redundant because default routes are enabled! Tests will pass without this
   map.resources :users, :only => [ :new, :create, :edit, :update, :destroy ]
   map.resource :account, :controller => "users"
-
+  map.resources :reset_password_requests, :only => [ :new, :create, :edit, :update]
+  
   map.resources :organizations do |o|
     o.resources :projects, :only => [ :show, :new, :create, :edit, :update, :destroy]
     # o.resources :guest_team_memberships, :only => [ :new ] 

@@ -49,6 +49,7 @@
           = f.label :remember_me
           = f.check_box :remember_me, :class => 'checkbox'
           = f.submit "login", :class => 'submit'
+          #forgot_password= link_to "Forgot password?", new_reset_password_request_path
           #revision= FULL_VERSION
       #about-right
         - if flash[:notice]

@@ -21,4 +21,13 @@ class UserMailer < ActionMailer::Base
     body :member => member, :added_by => added_by, :projects => project_names
   end
 
+  def reset_password_email(user)
+    subject     'Agilar Taskboard password reset request'
+    recipients  user.email
+    from        %("Agilar Taskboard" <info@agilar.org>)
+    sent_on     Time.now
+    
+    body :user => user
+  end
+  
 end
