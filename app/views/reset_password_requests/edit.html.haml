@@ -1,0 +1,12 @@
+- if @user.present?
+  #form
+    - form_for @user, :url => reset_password_request_path(:id => @user.perishable_token), :method => :put do |form|
+      .field
+        = form.label :password, "Please enter your new password:"
+        = form.password_field :password
+      .field
+        = form.label :password_confirmation, "Confirm password:"
+        = form.password_field :password_confirmation
+      = form.submit "Submit"
+- else
+  %h3 Error: Invalid token. #{link_to("Click here", login_path)} to go back to the login page.

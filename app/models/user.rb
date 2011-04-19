@@ -128,6 +128,14 @@ class User < ActiveRecord::Base
     organizations.collect { |organization| organization.admins }.flatten
   end
 
+  # sends a password reset mail to user
+  def send_password_reset_information
+    #generate a new token and save it in db
+    self.reset_perishable_token!
+    #send the e-mail
+    UserMailer.deliver_reset_password_email(self)
+  end
+
 private
   # This function is called when a user is created to add to the organization passed
   def add_to_organization_if_new_organization_present
