@@ -243,6 +243,15 @@ class TeamsControllerTest < ActionController::TestCase
       should "remove the user from the team" do
         assert !@team.users.include?(@user2)
       end
+      context "and remove it again" do
+        setup do
+          delete :remove_user, :id => @team.to_param, :organization_id => @organization.to_param, :user_id => @user2.to_param
+        end
+        should_respond_with :precondition_failed
+        should "give an error" do
+          assert_match 'has already been removed', @response.body
+        end
+      end
       
     end
 

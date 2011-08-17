@@ -67,8 +67,12 @@ class TeamsController < ApplicationController
   # delete /organizations/:organization_id/teams/:id/users/:user_id
   def remove_user
     @team = @organization.teams.find(params[:id])
-    @team.users.delete(@user)
-    render :json => '', :status => :ok
+    if @team.users.include?(@user)
+      @team.users.delete(@user)
+      render :json => '', :status => :ok
+    else
+      render :json => ['user', 'has already been removed'], :status => :precondition_failed
+    end
   end
   
 private 

@@ -19,7 +19,7 @@ class UserTest < ActiveSupport::TestCase
     should_not_allow_values_for :email, "blo", "sao@sadf", "asdasdg@sadasdg.asioghd"
     should_allow_values_for :login, "user"
     should_not_allow_values_for :login, "x", "", "hugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhugebobhug"
-  
+
     ################################################################################################################
     #
     # Associations
@@ -31,7 +31,7 @@ class UserTest < ActiveSupport::TestCase
     should_have_many :guest_projects
     should_belong_to :last_project
     should_have_many :nametags
-    
+
     should "have a getter and setter called 'added_by'" do
       # This is used to tell the user in the welcome email who added him
       @user = User.first
@@ -40,7 +40,7 @@ class UserTest < ActiveSupport::TestCase
     end
 
   end
-  
+
   context "When created" do
     setup do
       ActionMailer::Base.deliveries.clear
@@ -66,15 +66,15 @@ class UserTest < ActiveSupport::TestCase
       end
     end
   end
-  
+
   # test "members should be sent an email after their user has been created" do
-  # 
+  #
   #   john = Member.create(:name => 'John Locke', :username => 'jlocke', :email => 'john@locke.com', :new_organization => 1, :added_by => 'Charles Widmore')
-  # 
+  #
   #   email = MemberMailer.deliver_create(john)
   # end
-  
-  
+
+
   ################################################################################################################
   #
   # Instance Methods
@@ -93,7 +93,7 @@ class UserTest < ActiveSupport::TestCase
       assert !@user.admin?
     end
   end
-  
+
   context "#organizations_administered" do
     setup do
       @user = Factory(:user)
@@ -104,11 +104,11 @@ class UserTest < ActiveSupport::TestCase
       @user.organization_memberships.second.save
       @user.save
     end
-  
+
     should "return the organization the user admins" do
       assert_equal [ @organization ], @user.organizations_administered
     end
-    
+
     context "when the user is admin" do
       setup do
         @user.admin = true
@@ -120,7 +120,7 @@ class UserTest < ActiveSupport::TestCase
       end
     end
   end # End #organizations_administered
-  
+
   context "#admins_any_organization?" do
     setup do
       @organization = Factory(:organization)
@@ -158,9 +158,9 @@ class UserTest < ActiveSupport::TestCase
         assert @user2.admins_any_organization?
       end
     end
-    
+
   end # End #admins_any_organization?
-  
+
   context "#admins?" do
     setup do
       @organization = Factory(:organization)
@@ -170,7 +170,7 @@ class UserTest < ActiveSupport::TestCase
       @organization.reload
       @om2 = OrganizationMembership.create(:user => @user1, :organization => @organization)
     end
-    
+
     context "if the user administers the organization" do
       should "return true" do
         assert @user2.admins?(@organization)
@@ -193,18 +193,18 @@ class UserTest < ActiveSupport::TestCase
       # Add the user to a team in a project
       @team.users << @user
     end
-    
+
     should "return the projects where the user is working" do
       assert_equal [ @project ], @user.projects
     end
-    
+
     context "if the user is a guest team member" do
       setup do
         @project2 = Factory(:project)
         @team_membership = GuestTeamMembership.new(:user => @user, :project => @project2)
         @team_membership.save
       end
-      
+
       should "return also the projects where the user is guest" do
         assert_equal [ @project, @project2], @user.projects
       end
@@ -245,7 +245,7 @@ class UserTest < ActiveSupport::TestCase
       assert !@organization.teams.first.users.include?(@user)
     end
   end
-  
+
   # context "#guest_projects" do
   #   setup do
   #     @dfaraday = Factory(:dfaraday)
@@ -254,7 +254,7 @@ class UserTest < ActiveSupport::TestCase
   #     @team_membership = GuestTeamMembership.new(:user => @dfaraday, :project => @project2, :team => @team)
   #     @team_membership.save
   #   end
-  #   
+  #
   #   should "return the projects where the user is guest" do
   #     assert_equal [ @project2 ], @dfaraday.guest_projects
   #   end
@@ -268,7 +268,7 @@ class UserTest < ActiveSupport::TestCase
     should "return a capitalized version of the user name" do
       assert_equal "USER", @user.formatted_nametag
     end
-    
+
     context "When there is more than one user with the same name in a team" do
       setup do
         @team = Factory(:team)
@@ -310,7 +310,7 @@ class UserTest < ActiveSupport::TestCase
       @organization.organization_memberships.build(:user => @user)
       @organization.save
       @organization.reload
-      
+
       @organization2.organization_memberships.build(:user => @user)
       @organization2.save
       @organization2.reload
@@ -319,6 +319,26 @@ class UserTest < ActiveSupport::TestCase
     should "return the organization admins for the organizations the user belongs to" do
       assert_equal [@org_admin, @org_admin2], @user.administrators
     end
+  end
+
+  context "#send_password_reset_information" do
+    setup do
+      ActionMailer::Base.deliveries.clear
+      assert ActionMailer::Base.deliveries.empty?
+      @user = Factory(:user)
+    end
+
+    should "reset perishable token" do
+      @old_token = @user.perishable_token
+      @user.send_password_reset_information
+      assert @user.perishable_token != @old_token
+    end
+
+    should "send an email" do
+      @user.send_password_reset_information
+      assert !ActionMailer::Base.deliveries.empty?
+    end
+
   end
 
 end

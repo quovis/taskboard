@@ -9,3 +9,7 @@ config/database.yml
 config/options.yml
 public/system
 public/stylesheets/*.css
+.rvmrc
+.autotest
+Capfile
+config/deploy.rb
