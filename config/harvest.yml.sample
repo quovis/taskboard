@@ -1,0 +1,4 @@
+development:
+  subdomain: example
+  username: john.doe@example.com
+  password: abc123

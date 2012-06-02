@@ -1,12 +1,14 @@
 source :rubygems
 
-gem "rails", "2.3.11"
+gem "rails", "2.3.14"
 gem "sqlite3-ruby"
 gem "haml"
 gem "authlogic"
 gem "paperclip"
 gem "mysql"
 gem "ruby-prof"
+
+gem "harvested"
 
 # erubis required by rails_xss
 gem "erubis"
