@@ -1,0 +1,22 @@
+%h1
+  #{@story.realid}:
+  =h @story.name
+
+#story-show
+  .description= sanitize(simple_format(@story.description))
+  %p
+    This story is #{@story.human_status}.
+    There #{@story.tasks.not_started.count != 1 ? 'are' : 'is' }
+    %strong= @story.tasks.not_started.count
+    task#{'s' if @story.tasks.not_started.count != 1 } not started,
+    %strong= @story.tasks.in_progress.count
+    in progress and
+    %strong= @story.tasks.finished.count
+    finished
+  %p
+    Its priority is 
+    %strong= @story.priority
+  %p
+    It has an estimate of
+    %strong=@story.size
+    points

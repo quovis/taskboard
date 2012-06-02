@@ -87,6 +87,9 @@ class Story < ActiveRecord::Base
     return project.next_priority
   end
 
+  def human_status
+    status.gsub(/_/, ' ')
+  end
 private  
   def add_template_task
     self.tasks << Task.new(:name => "Add tasks")
