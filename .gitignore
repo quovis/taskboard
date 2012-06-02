@@ -12,3 +12,4 @@ public/stylesheets/*.css
 .autotest
 Capfile
 config/deploy.rb
+*.un~
