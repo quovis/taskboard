@@ -25,7 +25,7 @@ class Project < ActiveRecord::Base
   # Attributes Accessible
   #
   ################################################################################################################
-  attr_accessible :name, :organization, :team, :public
+  attr_accessible :name, :organization, :team, :public, :harvest_project_id
   attr_accessor :team
   
   ################################################################################################################
