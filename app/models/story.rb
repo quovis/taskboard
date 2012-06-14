@@ -89,6 +89,10 @@ class Story < ActiveRecord::Base
     return self.priority = 0 if self.priority && self.priority < 0
     return project.next_priority
   end
+  
+  def human_status
+    status.gsub(/_/, ' ')
+  end
 
   def harvest_task_name
     "[#{realid}] #{name}"

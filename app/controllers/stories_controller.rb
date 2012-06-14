@@ -2,13 +2,16 @@ class StoriesController < ApplicationController
   before_filter :require_user, :except => [:tasks_by_status]
   before_filter :require_belong_to_project_or_team_or_admin, :except => [:tasks_by_status]
   before_filter :require_belong_to_project_or_auth_guest, :only => [:tasks_by_status]
-  before_filter :find_story, :only => [ :edit, :update, :destroy, :start, :stop, :finish, :update_priority, :update_size ]
-  layout nil
-
+  before_filter :find_story, :only => [ :show, :edit, :update, :destroy, :start, :stop, :finish, :update_priority, :update_size ]
+  layout :set_layout
+  
   # GET /projects/:project_id/stories
   def index
     @stories = @project.stories
     render :json => @stories, :status => :ok
+  end
+  
+  def show
   end
   
   # GET /projects/:project_id/stories/new
@@ -100,7 +103,12 @@ class StoriesController < ApplicationController
         @tasks = []
     end
   end
+  
   def find_story
     @story = @project.stories.find(params[:id])
+  end
+  
+  def set_layout
+    (request.path_parameters["action"] == "show") ? 'application' : nil	
   end
 end
