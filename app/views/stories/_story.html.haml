@@ -44,6 +44,6 @@
           :javascript
             new Ajax.InPlaceEditor('edit_size_#{story.id}', '/projects/#{story.project.to_param}/stories/#{story.to_param}/update_size', { cancelControl: 'button' });
         - else
-          %p= story.id
+          %p= story.size
   %td.description-cell
     = story.description
