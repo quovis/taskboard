@@ -4,8 +4,11 @@ db/schema.rb
 tmp
 coverage
 coverage.data
+tmp
+coverage.data
 config/database.yml
 config/options.yml
+config/harvest.yml
 public/system
 public/stylesheets/*.css
 .rvmrc

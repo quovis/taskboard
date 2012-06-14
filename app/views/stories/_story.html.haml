@@ -2,9 +2,8 @@
   %td.name-cell
     %strong
       = story.release? ? 'RELEASE' : story.realid
-    
     = link_to story.name, project_story_path(story.project, story)
-    
+
     - if @view == :team
       == - #{link_to("#{story.project.name}", project_backlog_index_path(story.project.id))} - 
     (

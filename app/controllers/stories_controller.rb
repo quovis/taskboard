@@ -4,6 +4,7 @@ class StoriesController < ApplicationController
   before_filter :require_belong_to_project_or_auth_guest, :only => [:tasks_by_status]
   before_filter :find_story, :only => [ :show, :edit, :update, :destroy, :start, :stop, :finish, :update_priority, :update_size ]
   layout :set_layout
+  layout nil
 
   # GET /projects/:project_id/stories
   def index
@@ -106,7 +107,7 @@ class StoriesController < ApplicationController
   def find_story
     @story = @project.stories.find(params[:id])
   end
-  
+
   def set_layout
     (request.path_parameters["action"] == "show") ? 'application' : nil
   end
